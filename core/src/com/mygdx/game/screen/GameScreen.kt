@@ -9,14 +9,10 @@ import com.mygdx.game.Constants
 import com.mygdx.game.stage.MainStage
 
 class GameScreen : Screen {
-    private val fitViewport: FitViewport
-    private val mainStage: MainStage
 
-    init {
-        val camera = OrthographicCamera()
-        fitViewport = FitViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
-        mainStage = MainStage(camera)
-    }
+    private val camera = OrthographicCamera()
+    private val fitViewport: FitViewport = FitViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
+    private val mainStage: MainStage = MainStage(camera)
 
     override fun show() = Unit
 
@@ -26,7 +22,7 @@ class GameScreen : Screen {
         mainStage.act()
     }
 
-    override fun resize(width: Int, height: Int) = fitViewport.update(width, height)
+    override fun resize(width: Int, height: Int) =  fitViewport.update(width, height)
 
     override fun pause() = Unit
 
@@ -35,4 +31,5 @@ class GameScreen : Screen {
     override fun hide() = Unit
 
     override fun dispose() = mainStage.dispose()
+
 }

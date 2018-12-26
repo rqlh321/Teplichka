@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 
 class BodyController(private val body: Body) : InputProcessor {
+
     private val behavior: Behavior = body.userData as Behavior
 
     private var x = 0
@@ -46,17 +47,15 @@ class BodyController(private val body: Body) : InputProcessor {
         val dY = screenY - y
 
         if (dX > 0) {
+            body.applyAngularImpulse(-2f, true)
             body.applyLinearImpulse(toRight, 0f, body.position.x, body.position.y, true)
         } else if (dX < 0) {
+            body.applyAngularImpulse(2f, true)
             body.applyLinearImpulse(toLeft, 0f, body.position.x, body.position.y, true)
         }
-
-        if (dY < 0) {
-            if (behavior.jump) body.applyLinearImpulse(0f, UP, body.position.x, body.position.y, true)
-        } else if (dY > 0) {
-            if (behavior.jump) body.applyLinearImpulse(0f, DOWN, body.position.x, body.position.y, true)
+        if (behavior.jump && dY < 0) {
+            body.applyLinearImpulse(0f, UP, body.position.x, body.position.y, true)
         }
-
         x = screenX
         y = screenY
         return false
@@ -67,9 +66,9 @@ class BodyController(private val body: Body) : InputProcessor {
     override fun scrolled(amount: Int): Boolean = false
 
     companion object {
-        private const val UP = .0005f
-        private const val DOWN = -.0005f
-        private const val toRight = .0001f
-        private const val toLeft = -.0001f
+        private const val UP = .005f
+        private const val DOWN = -.001f
+        private const val toRight = .00001f
+        private const val toLeft = -.00001f
     }
 }
