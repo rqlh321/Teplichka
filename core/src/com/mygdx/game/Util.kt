@@ -1,8 +1,6 @@
 package com.mygdx.game
 
-import box2dLight.PointLight
-import box2dLight.RayHandler
-import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
@@ -36,14 +34,13 @@ fun World.clear() {
 
 fun World.initPlatform(): Body {
     val bodyDef = BodyDef()
-    bodyDef.type = BodyDef.BodyType.KinematicBody
-    bodyDef.angularVelocity = .01f
+    bodyDef.type = BodyDef.BodyType.StaticBody
     bodyDef.position.set(Vector2(0f, 0f))
     bodyDef.fixedRotation = false
     val body = createBody(bodyDef)
     body.userData = Behavior(Unit.PLATFORM)
     val bodyShape = ChainShape()
-    val chain = FloatArray(200)
+    val chain = FloatArray(10)
     chain.forEachIndexed { index, _ ->
         chain[index] = if (index % 2 == 0) index * 5f else Math.random().toFloat()
     }
@@ -55,7 +52,7 @@ fun World.initPlatform(): Body {
     return body
 }
 
-fun World.initBody(rayHandler: RayHandler, unit: Unit, position: Vector2): Body {
+fun World.initBody(unit: Unit, position: Vector2): Body {
     val bodyDef = BodyDef()
     bodyDef.type = BodyDef.BodyType.DynamicBody
     bodyDef.position.set(position)
@@ -69,26 +66,15 @@ fun World.initBody(rayHandler: RayHandler, unit: Unit, position: Vector2): Body 
 
     when (unit) {
         Unit.ENEMY -> {
-//            PointLight(rayHandler, 128, Color(1f, .1f, .1f, 1f), .1f, -5f, 2f).apply {
-//                isStaticLight = false
-//                isSoft = true
-//            }.let { it.attachToBody(body) }
-
             circleShape.radius = Math.random().toFloat() * .1f
             fixtureDefFoots.restitution = Math.random().toFloat() * .1f
             fixtureDefFoots.density = Math.random().toFloat() * .1f
         }
         Unit.PLAYER -> {
-            val color = Color(0.2f, 1f, 1f, 1f)
-            PointLight(rayHandler, 128, color, 1f, 1f, 1f).apply {
-                isStaticLight = false
-                isSoft = true
-            }.let { it.attachToBody(body) }
-
             circleShape.radius = .1f
-            fixtureDefFoots.restitution = .1f
-            fixtureDefFoots.density = .5f
-            fixtureDefFoots.friction = .8f
+            fixtureDefFoots.restitution = .01f
+            fixtureDefFoots.density = .01f
+            fixtureDefFoots.friction = .01f
 
         }
     }
@@ -100,7 +86,7 @@ fun World.initBody(rayHandler: RayHandler, unit: Unit, position: Vector2): Body 
     return body
 }
 
-fun OrthographicCamera.smoothScrollOn(body: Body) {
+fun Camera.smoothScrollOn(body: Body) {
     val dx = body.position.x - position.x
     val cameraX = position.x + dx * .2f
 

@@ -3,16 +3,11 @@ package com.mygdx.game.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.utils.viewport.FitViewport
-import com.mygdx.game.Constants
 import com.mygdx.game.stage.MainStage
 
 class GameScreen : Screen {
 
-    private val camera = OrthographicCamera()
-    private val fitViewport: FitViewport = FitViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
-    private val mainStage: MainStage = MainStage(camera)
+    private val mainStage: MainStage = MainStage()
 
     override fun show() = Unit
 
@@ -22,7 +17,7 @@ class GameScreen : Screen {
         mainStage.act()
     }
 
-    override fun resize(width: Int, height: Int) =  fitViewport.update(width, height)
+    override fun resize(width: Int, height: Int) =  mainStage.viewport.update(width, height)
 
     override fun pause() = Unit
 
