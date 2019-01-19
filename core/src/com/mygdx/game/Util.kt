@@ -2,10 +2,12 @@ package com.mygdx.game
 
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.joints.MotorJointDef
 import com.badlogic.gdx.utils.Array
+import com.mygdx.game.LevelMapManager.worldWidth
 
 fun World.clear() {
     val bodyArray = Array<Body>()
@@ -56,8 +58,7 @@ fun World.initBody(unit: Unit, position: Vector2): Body {
     val bodyDef = BodyDef()
     bodyDef.type = BodyDef.BodyType.DynamicBody
     bodyDef.position.set(position)
-
-    bodyDef.fixedRotation = false
+    bodyDef.fixedRotation = true
     val body = createBody(bodyDef)
     body.userData = Behavior(unit)
 
@@ -72,9 +73,9 @@ fun World.initBody(unit: Unit, position: Vector2): Body {
         }
         Unit.PLAYER -> {
             circleShape.radius = .1f
-            fixtureDefFoots.restitution = .01f
-            fixtureDefFoots.density = .01f
-            fixtureDefFoots.friction = .01f
+            fixtureDefFoots.restitution = 0f
+            fixtureDefFoots.density = 0f
+            fixtureDefFoots.friction = 0f
 
         }
     }
@@ -102,4 +103,54 @@ fun Camera.smoothScrollOn(body: Body) {
 //        camera.zoom = cameraZ
 
     update()
+}
+
+fun Camera.leapOnTarget( body: Body) {
+    if (body.position.x - viewportWidth / 2 > 0 && body.position.x + viewportWidth / 2 < worldWidth) {
+        if (body.position.y > viewportHeight / 2) {
+            position.set(
+                    position.x + (body.position.x - position.x) * .1f,
+                    position.y + (body.position.y - position.y) * .1f,
+                    0f)
+        } else {
+            position.set(
+                    position.x + (body.position.x - position.x) * .1f,
+                    position.y + (viewportHeight / 2 - position.y) * .1f,
+                    0f)
+        }
+    } else {
+        if (body.position.y > viewportHeight / 2) {
+            position.set(
+                    position.x,
+                    position.y + (body.position.y - position.y) * .1f,
+                    0f)
+        } else {
+            if (body.position.x < viewportWidth / 2) {
+                position.set(
+                        position.x + (viewportWidth / 2 - position.x) * .1f,
+                        position.y + (viewportHeight / 2 - position.y) * .1f,
+                        0f)
+            } else {
+                position.set(
+                        position.x + (worldWidth - viewportWidth / 2 - position.x) * .1f,
+                        position.y + (viewportHeight / 2 - position.y) * .1f,
+                        0f)
+            }
+        }
+    }
+//    camera.zoom = camera.zoom + (1 + Math.abs(body.linearVelocity.x) * .05f - camera.zoom) * .01f
+    update()
+}
+
+fun TiledMap.getSize(): FloatArray {
+    val prop = properties
+    val mapWidth = prop.get("width", Int::class.java)
+    val mapHeight = prop.get("height", Int::class.java)
+    val tilePixelWidth = prop.get("tilewidth", Int::class.java)
+    val tilePixelHeight = prop.get("tileheight", Int::class.java)
+
+    val mapPixelWidth = mapWidth * tilePixelWidth.toFloat()
+    val mapPixelHeight = mapHeight * tilePixelHeight.toFloat()
+
+    return floatArrayOf(mapPixelWidth, mapPixelHeight)
 }

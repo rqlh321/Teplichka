@@ -6,10 +6,14 @@ import com.mygdx.game.screen.LoadingScreen
 
 class MyGdxGame : Game() {
 
+    init {
+        GAME = this
+    }
+
     override fun create() = setScreen(LoadingScreen(this))
 
     companion object {
-
+        var GAME: MyGdxGame? = null
         val ASSET_MANAGER = AssetManager()
 
     }
