@@ -1,15 +1,16 @@
 package com.mygdx.game
 
 import com.badlogic.gdx.graphics.Camera
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.joints.MotorJointDef
 import com.badlogic.gdx.utils.Array
-import com.mygdx.game.LevelMapManager.worldWidth
+import com.mygdx.game.LevelMapManager.Companion.worldWidth
 
-fun World.clear() {
+fun World.act() {
+    step(1 / 60f, 6, 2)
+
     val bodyArray = Array<Body>()
     getBodies(bodyArray)
     bodyArray.forEach { bodyA ->
@@ -109,31 +110,31 @@ fun Camera.leapOnTarget( body: Body) {
     if (body.position.x - viewportWidth / 2 > 0 && body.position.x + viewportWidth / 2 < worldWidth) {
         if (body.position.y > viewportHeight / 2) {
             position.set(
-                    position.x + (body.position.x - position.x) * .1f,
-                    position.y + (body.position.y - position.y) * .1f,
+                    position.x + (body.position.x - position.x) * Constants.REDUSE_CAMERA_SPEED,
+                    position.y + (body.position.y - position.y)  * Constants.REDUSE_CAMERA_SPEED,
                     0f)
         } else {
             position.set(
-                    position.x + (body.position.x - position.x) * .1f,
-                    position.y + (viewportHeight / 2 - position.y) * .1f,
+                    position.x + (body.position.x - position.x)  * Constants.REDUSE_CAMERA_SPEED,
+                    position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
                     0f)
         }
     } else {
         if (body.position.y > viewportHeight / 2) {
             position.set(
                     position.x,
-                    position.y + (body.position.y - position.y) * .1f,
+                    position.y + (body.position.y - position.y) * Constants.REDUSE_CAMERA_SPEED,
                     0f)
         } else {
             if (body.position.x < viewportWidth / 2) {
                 position.set(
-                        position.x + (viewportWidth / 2 - position.x) * .1f,
-                        position.y + (viewportHeight / 2 - position.y) * .1f,
+                        position.x + (viewportWidth / 2 - position.x) * Constants.REDUSE_CAMERA_SPEED ,
+                        position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
                         0f)
             } else {
                 position.set(
-                        position.x + (worldWidth - viewportWidth / 2 - position.x) * .1f,
-                        position.y + (viewportHeight / 2 - position.y) * .1f,
+                        position.x + (worldWidth - viewportWidth / 2 - position.x)  * Constants.REDUSE_CAMERA_SPEED,
+                        position.y + (viewportHeight / 2 - position.y)  * Constants.REDUSE_CAMERA_SPEED,
                         0f)
             }
         }

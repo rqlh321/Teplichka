@@ -36,23 +36,23 @@
   <object id="62" gid="9" x="1014.05" y="729.106" width="281" height="263"/>
  </objectgroup>
  <objectgroup id="5" name="player_positions">
-  <object id="4" name="start_point" x="1168" y="688"/>
+  <object id="4" name="start_point" x="964.667" y="700.667"/>
  </objectgroup>
  <objectgroup id="2" name="platforms">
   <object id="61" x="1281.33" y="720">
    <polyline points="0,0 -1280,-2.66667"/>
   </object>
   <object id="65" x="1121" y="709.333">
-   <polyline points="0,0 -40.6667,-0.333333"/>
+   <polyline points="-340,-16.6667 -380.667,-17"/>
   </object>
   <object id="66" x="1040.33" y="699.667">
-   <polyline points="0,0 -39.6667,-1"/>
+   <polyline points="-208,4.66667 -247.667,3.66667"/>
   </object>
   <object id="67" x="960" y="679.667">
-   <polyline points="0,0 -40.6667,-0.333333"/>
+   <polyline points="-26.6667,27.3333 -67.3334,27"/>
   </object>
   <object id="68" x="894.667" y="718">
-   <polyline points="0,0 -15,-9.33333 -15,-16.6667 -32.6667,-13.6667 -44.6667,-26.6667 -62,-41.3333"/>
+   <polyline points="0,0 -15,-9.33333 -15,-16.6667 -32.6667,-13.6667 -56,-6.00003 -126.667,6.00003"/>
   </object>
  </objectgroup>
 </map>

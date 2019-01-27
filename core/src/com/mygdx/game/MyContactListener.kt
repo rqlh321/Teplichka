@@ -10,6 +10,7 @@ class MyContactListener : ContactListener {
     override fun beginContact(contact: Contact) {
         val bodyA = contact.fixtureA.body
         val bodyB = contact.fixtureB.body
+
         val objectA = bodyA.userData as Behavior
         val objectB = bodyB.userData as Behavior
 
@@ -21,8 +22,6 @@ class MyContactListener : ContactListener {
             objectB.connectTo.add(bodyA)
         }
 
-        objectA.updateJump(objectB, true)
-        objectB.updateJump(objectA, true)
     }
 
     override fun endContact(contact: Contact) {
@@ -30,12 +29,27 @@ class MyContactListener : ContactListener {
         val bodyB = contact.fixtureB.body
         val objectA = bodyA.userData as Behavior
         val objectB = bodyB.userData as Behavior
-        objectA.updateJump(objectB, false)
-        objectB.updateJump(objectA, false)
+
+        objectA.onGround = false
+        objectB.onGround = false
+        objectA.extraForce = true
+        objectB.extraForce = true
     }
 
-    override fun preSolve(contact: Contact, oldManifold: Manifold) = Unit
+    override fun preSolve(contact: Contact, oldManifold: Manifold) {
+        val bodyA = contact.fixtureA.body
+        val bodyB = contact.fixtureB.body
+        val objectA = bodyA.userData as Behavior
+        val objectB = bodyB.userData as Behavior
 
-    override fun postSolve(contact: Contact, impulse: ContactImpulse) = Unit
+        objectA.onGround = true
+        objectB.onGround = true
+        objectA.extraForce = false
+        objectB.extraForce = false
+    }
+
+    override fun postSolve(contact: Contact, impulse: ContactImpulse) {
+
+    }
 
 }
