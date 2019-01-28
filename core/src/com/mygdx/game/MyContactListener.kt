@@ -4,6 +4,8 @@ import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.ContactListener
 import com.badlogic.gdx.physics.box2d.Manifold
+import com.mygdx.game.unit.Entity
+import com.mygdx.game.unit.Type
 
 class MyContactListener : ContactListener {
 
@@ -11,15 +13,13 @@ class MyContactListener : ContactListener {
         val bodyA = contact.fixtureA.body
         val bodyB = contact.fixtureB.body
 
-        val objectA = bodyA.userData as Behavior
-        val objectB = bodyB.userData as Behavior
+        val objectA = bodyA.userData as Entity
+        val objectB = bodyB.userData as Entity
 
-        if (objectA.unit == Unit.PLAYER && objectB.unit == Unit.ENEMY) {
-            objectA.connectTo.add(bodyB)
+        if (objectA.type == Type.PLAYER && objectB.type == Type.ENEMY) {
         }
 
-        if (objectB.unit == Unit.PLAYER && objectA.unit == Unit.ENEMY) {
-            objectB.connectTo.add(bodyA)
+        if (objectB.type == Type.PLAYER && objectA.type == Type.ENEMY) {
         }
 
     }
@@ -27,8 +27,8 @@ class MyContactListener : ContactListener {
     override fun endContact(contact: Contact) {
         val bodyA = contact.fixtureA.body
         val bodyB = contact.fixtureB.body
-        val objectA = bodyA.userData as Behavior
-        val objectB = bodyB.userData as Behavior
+        val objectA = bodyA.userData as Entity
+        val objectB = bodyB.userData as Entity
 
         objectA.onGround = false
         objectB.onGround = false
@@ -39,8 +39,8 @@ class MyContactListener : ContactListener {
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
         val bodyA = contact.fixtureA.body
         val bodyB = contact.fixtureB.body
-        val objectA = bodyA.userData as Behavior
-        val objectB = bodyB.userData as Behavior
+        val objectA = bodyA.userData as Entity
+        val objectB = bodyB.userData as Entity
 
         objectA.onGround = true
         objectB.onGround = true

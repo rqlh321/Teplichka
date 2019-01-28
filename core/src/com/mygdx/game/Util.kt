@@ -4,33 +4,20 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import com.badlogic.gdx.physics.box2d.joints.MotorJointDef
 import com.badlogic.gdx.utils.Array
 import com.mygdx.game.LevelMapManager.Companion.worldWidth
+import com.mygdx.game.unit.Entity
+import com.mygdx.game.unit.Type
 
 fun World.act() {
     step(1 / 60f, 6, 2)
 
     val bodyArray = Array<Body>()
     getBodies(bodyArray)
-    bodyArray.forEach { bodyA ->
-        val behavior = bodyA.userData as Behavior
-        if (!behavior.alive) {
-            destroyBody(bodyA)
-        } else {
-            behavior.connectTo.forEach { bodyB ->
-                if (bodyB.jointList.size == 0) {
-                    val jointDef = MotorJointDef()
-                    jointDef.angularOffset = 0f
-                    jointDef.collideConnected = false
-                    jointDef.correctionFactor = 0f
-                    jointDef.maxForce = 1f
-                    jointDef.maxTorque = 1f
-                    jointDef.initialize(bodyA, bodyB)
-                    createJoint(jointDef)
-                }
-            }
-            behavior.connectTo.clear()
+    bodyArray.forEach { body ->
+        val entity = body.userData as Entity
+        if (!entity.alive) {
+            destroyBody(body)
         }
     }
 }
@@ -41,7 +28,7 @@ fun World.initPlatform(): Body {
     bodyDef.position.set(Vector2(0f, 0f))
     bodyDef.fixedRotation = false
     val body = createBody(bodyDef)
-    body.userData = Behavior(Unit.PLATFORM)
+    body.userData = Entity(Type.PLATFORM)
     val bodyShape = ChainShape()
     val chain = FloatArray(10)
     chain.forEachIndexed { index, _ ->
@@ -55,24 +42,24 @@ fun World.initPlatform(): Body {
     return body
 }
 
-fun World.initBody(unit: Unit, position: Vector2): Body {
+fun World.initBody(type: Type, position: Vector2): Body {
     val bodyDef = BodyDef()
     bodyDef.type = BodyDef.BodyType.DynamicBody
     bodyDef.position.set(position)
     bodyDef.fixedRotation = true
     val body = createBody(bodyDef)
-    body.userData = Behavior(unit)
+    body.userData = Entity(type)
 
     val circleShape = CircleShape()
     val fixtureDefFoots = FixtureDef()
 
-    when (unit) {
-        Unit.ENEMY -> {
+    when (type) {
+        Type.ENEMY -> {
             circleShape.radius = Math.random().toFloat() * .1f
             fixtureDefFoots.restitution = Math.random().toFloat() * .1f
             fixtureDefFoots.density = Math.random().toFloat() * .1f
         }
-        Unit.PLAYER -> {
+        Type.PLAYER -> {
             circleShape.radius = .1f
             fixtureDefFoots.restitution = 0f
             fixtureDefFoots.density = 0f

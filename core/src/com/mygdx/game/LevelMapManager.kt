@@ -1,21 +1,17 @@
 package com.mygdx.game
 
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.MapLayer
-import com.badlogic.gdx.maps.MapLayers
-import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.ChainShape
-import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.World
 import com.mygdx.game.stage.MainStage
+import com.mygdx.game.unit.Entity
+import com.mygdx.game.unit.Type
 
 /**
  * Created by sic on 20.01.2017.
@@ -23,6 +19,7 @@ import com.mygdx.game.stage.MainStage
 
 class LevelMapManager(mainStage: MainStage) {
     var tiledMap: TiledMap = MyGdxGame.ASSET_MANAGER.get("map/second/map0.tmx")
+
     private val tiledMapRenderer: ParallaxTiledMapRenderer
     private val layerBackgroundZero: MapLayer
     private val layerBackgroundFirst: MapLayer
@@ -60,7 +57,7 @@ class LevelMapManager(mainStage: MainStage) {
         val bodyDef = BodyDef()
         bodyDef.type = BodyDef.BodyType.StaticBody
         val platform = world.createBody(bodyDef)
-        platform.userData = Behavior(Unit.PLATFORM)
+        platform.userData = Entity(Type.PLATFORM)
 
         val worldObjects = layerPlatformBody.objects
         for (objectWorld in worldObjects) {
@@ -85,31 +82,6 @@ class LevelMapManager(mainStage: MainStage) {
         playerPosition.set(playerPosition.x * Constants.SCALE, playerPosition.y * Constants.SCALE)
         return playerPosition
     }
-
-    //    public Body endPointBody() {
-    //        Rectangle rectangle = ((RectangleMapObject) playerPositions.getObjects().get("end_point")).getRectangle();
-    //        Vector2 endPoint = new Vector2();
-    //        rectangle.getPosition(endPoint);
-    //        endPoint.set(endPoint.x , endPoint.y );
-    //
-    //        BodyDef bodyDef = new BodyDef();
-    //        bodyDef.type = BodyDef.BodyType.StaticBody;
-    //        bodyDef.position.set(endPoint.x + rectangle.getWidth() / 2 , endPoint.y + rectangle.getHeight() / 2 );
-    //
-    //        Body endPointBody = world.createBody(bodyDef);
-    //        endPointBody.setUserData("endPointBody");
-    //
-    //        PolygonShape shape = new PolygonShape();
-    //        shape.setAsBox(rectangle.getWidth() / 2 , rectangle.getHeight() / 2 );
-    //
-    //        FixtureDef fixtureDef = new FixtureDef();
-    //        fixtureDef.density = 0;
-    //        fixtureDef.isSensor = true;
-    //        fixtureDef.shape = shape;
-    //        endPointBody.createFixture(fixtureDef);
-    //        shape.dispose();
-    //        return endPointBody;
-    //    }
 
     fun renderBackground() {
         tiledMapRenderer.setView(camera)
