@@ -15,10 +15,13 @@ class ParallaxTiledMapRenderer(map: TiledMap, private val camera: OrthographicCa
             val texture = mapObject as TextureMapObject?
             batch.begin()
             if (mapObject.name != null && mapObject.name == "background_0") {
+
+                val x = camera.position.x - camera.viewportWidth * camera.zoom / 2
+                val y = camera.position.y - camera.viewportHeight * camera.zoom / 2
                 batch.draw(
                         texture!!.textureRegion,
-                        camera.position.x - camera.viewportWidth * camera.zoom / 2,
-                        camera.position.y - camera.viewportHeight * camera.zoom / 2,
+                        x,
+                        y,
                         texture.originX,
                         texture.originY,
                         texture.textureRegion.regionWidth.toFloat(),
