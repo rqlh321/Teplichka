@@ -27,7 +27,7 @@ class MainStage : Stage() {
 
     private val lvlManager = LevelMapManager(this)
     private val actorsRenderer: ActorsRenderer
-private val paralaxRenderer = ParalaxRenderer(camera as OrthographicCamera,batch)
+    private val paralaxRenderer = ParalaxRenderer(camera as OrthographicCamera, batch)
     private val box2DDebugRenderer: Box2DDebugRenderer = Box2DDebugRenderer().apply {
         isDrawVelocities = true
         isDrawContacts = true
@@ -43,8 +43,9 @@ private val paralaxRenderer = ParalaxRenderer(camera as OrthographicCamera,batch
     override fun act() {
         super.act()
 
-        lvlManager.renderBackground()
         batch.projectionMatrix = camera.combined
+//        lvlManager.renderBackground()
+
         batch.begin()
 
         paralaxRenderer.render()
