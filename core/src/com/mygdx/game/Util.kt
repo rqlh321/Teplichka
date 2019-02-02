@@ -2,12 +2,16 @@ package com.mygdx.game
 
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.utils.Array
 import com.mygdx.game.LevelMapManager.Companion.worldWidth
 import com.mygdx.game.unit.Entity
 import com.mygdx.game.unit.Type
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.BodyDef
+
 
 fun World.act() {
     step(1 / 60f, 6, 2)
@@ -93,16 +97,16 @@ fun Camera.smoothScrollOn(body: Body) {
     update()
 }
 
-fun Camera.leapOnTarget( body: Body) {
+fun Camera.leapOnTarget(body: Body) {
     if (body.position.x - viewportWidth / 2 > 0 && body.position.x + viewportWidth / 2 < worldWidth) {
         if (body.position.y > viewportHeight / 2) {
             position.set(
                     position.x + (body.position.x - position.x) * Constants.REDUSE_CAMERA_SPEED,
-                    position.y + (body.position.y - position.y)  * Constants.REDUSE_CAMERA_SPEED,
+                    position.y + (body.position.y - position.y) * Constants.REDUSE_CAMERA_SPEED,
                     0f)
         } else {
             position.set(
-                    position.x + (body.position.x - position.x)  * Constants.REDUSE_CAMERA_SPEED,
+                    position.x + (body.position.x - position.x) * Constants.REDUSE_CAMERA_SPEED,
                     position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
                     0f)
         }
@@ -115,13 +119,13 @@ fun Camera.leapOnTarget( body: Body) {
         } else {
             if (body.position.x < viewportWidth / 2) {
                 position.set(
-                        position.x + (viewportWidth / 2 - position.x) * Constants.REDUSE_CAMERA_SPEED ,
+                        position.x + (viewportWidth / 2 - position.x) * Constants.REDUSE_CAMERA_SPEED,
                         position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
                         0f)
             } else {
                 position.set(
-                        position.x + (worldWidth - viewportWidth / 2 - position.x)  * Constants.REDUSE_CAMERA_SPEED,
-                        position.y + (viewportHeight / 2 - position.y)  * Constants.REDUSE_CAMERA_SPEED,
+                        position.x + (worldWidth - viewportWidth / 2 - position.x) * Constants.REDUSE_CAMERA_SPEED,
+                        position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
                         0f)
             }
         }
@@ -141,4 +145,31 @@ fun TiledMap.getSize(): FloatArray {
     val mapPixelHeight = mapHeight * tilePixelHeight.toFloat()
 
     return floatArrayOf(mapPixelWidth, mapPixelHeight)
+}
+
+fun TiledMapTileLayer.createStaticBody(world: World) {
+
+    (0..width).forEach { wIndex ->
+        (0..height).forEach { hIndex ->
+            val cell = getCell(wIndex, hIndex)
+            if (cell != null) {
+                val groundBodyDef = BodyDef()
+                groundBodyDef.position.set(
+                        Vector2(
+                                wIndex * tileWidth * Constants.SCALE* Constants.TILE_SCALE,
+                                hIndex * tileHeight * Constants.SCALE * Constants.TILE_SCALE
+                        )
+                )
+                val groundBody = world.createBody(groundBodyDef)
+                groundBody.userData = Entity(Type.PLATFORM)
+                val groundBox = PolygonShape()
+                groundBox.setAsBox(
+                        tileWidth / 2 * Constants.SCALE* Constants.TILE_SCALE,
+                        tileHeight / 2 * Constants.SCALE* Constants.TILE_SCALE
+                )
+                groundBody.createFixture(groundBox, 0.0f)
+                groundBox.dispose()
+            }
+        }
+    }
 }

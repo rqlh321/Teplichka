@@ -44,23 +44,24 @@ class MainStage : Stage() {
         super.act()
 
         batch.projectionMatrix = camera.combined
-//        lvlManager.renderBackground()
 
-        batch.begin()
+//        batch.begin()
 
-        paralaxRenderer.render()
-        actorsRenderer.render(batch)
+//        paralaxRenderer.render()
+//        actorsRenderer.render(batch)
 
-        batch.end()
+//        batch.end()
+
+        lvlManager.mapRenderer.setView(camera as OrthographicCamera)
+        lvlManager.mapRenderer.render()
 
         box2DDebugRenderer.render(world, camera.combined)
 
-        lvlManager.renderForeground()
 
-        camera.leapOnTarget(player)
+        camera.smoothScrollOn(player)
 
         world.act()
-        if (player.position.y < 0) MyGdxGame.GAME?.create()
+//        if (player.position.y < 0) MyGdxGame.GAME?.create()
     }
 
     override fun dispose() {

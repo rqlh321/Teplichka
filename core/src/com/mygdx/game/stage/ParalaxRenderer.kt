@@ -8,40 +8,27 @@ import com.badlogic.gdx.math.Vector2
 import com.mygdx.game.Constants
 import com.mygdx.game.Constants.VIEW_PORT_HEIGHT
 import com.mygdx.game.Constants.VIEW_PORT_WIDTH
-import com.mygdx.game.Layers
+import kotlin.random.Random
 
 class ParalaxRenderer(private val camera: OrthographicCamera, private val batch: Batch) {
 
-    private val bg2 = Texture(Gdx.files.internal("map/second/background_2_0.png"))
-    private val bg1 = Texture(Gdx.files.internal("map/second/background_1_1.png"))
-    private val bg0 = Texture(Gdx.files.internal("map/second/background_0.png"))
-
-    private val backgrounds: List<Layer> = listOf(
-            Layer(bg0, Vector2(0f, 0f), 0f, 0f),
-
-            Layer(bg1, Vector2(3f, 0f), .1f, .04f),
-            Layer(bg1, Vector2(6f, 0f), .1f, .04f),
-            Layer(bg1, Vector2(9f, 0f), .1f, .04f),
-            Layer(bg1, Vector2(12f, 0f), .1f, .04f),
-
-            Layer(bg2, Vector2(0f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(1f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(2f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(3f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(4f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(5f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(6f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(7f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(8f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(9f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(10f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(11f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(12f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(13f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(14f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(15f, 0f), .3f, .06f),
-            Layer(bg2, Vector2(16f, 0f), .3f, .06f)
+    private val textures: List<Texture> = listOf(
+            Texture(Gdx.files.internal("map/second/background_0.png")),
+            Texture(Gdx.files.internal("map/second/background_1_1.png")),
+            Texture(Gdx.files.internal("map/second/background_2_0.png"))
     )
+    private val backgrounds: MutableList<Layer>
+
+    init {
+        backgrounds = ArrayList()
+        textures.forEachIndexed { index, texture ->
+            val factor:Float = index / 10f
+            (0..(index * 10)).forEach {
+                val x = if(index==0) 0f else Random.nextInt(0,30).toFloat()
+                backgrounds.add(Layer(texture, Vector2(x, 0f), factor, factor))
+            }
+        }
+    }
 
     private val foregroud: List<Layer> = emptyList()
 

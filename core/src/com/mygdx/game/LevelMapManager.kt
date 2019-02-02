@@ -5,6 +5,9 @@ import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.ChainShape
@@ -18,20 +21,15 @@ import com.mygdx.game.unit.Type
  */
 
 class LevelMapManager(mainStage: MainStage) {
-    var tiledMap: TiledMap = MyGdxGame.ASSET_MANAGER.get("map/second/map0.tmx")
 
-    private val tiledMapRenderer: ParallaxTiledMapRenderer
-    private val layerBackgroundZero: MapLayer
-    private val layerBackgroundFirst: MapLayer
-    private val layerBackgroundSecond: MapLayer
-    private val layerForeground: MapLayer
-    private val layerPlatformBody: MapLayer
+    var tiledMap: TiledMap = MyGdxGame.ASSET_MANAGER.get("map/second/map2.tmx")
+
+    private val layerPlatformBody: TiledMapTileLayer
     private val playerPositions: MapLayer
-//    val enemiesLayer: MapLayer
 
-    private val camera: OrthographicCamera = mainStage.viewport.camera as OrthographicCamera
     private val world: World = mainStage.world
 
+    val mapRenderer:OrthogonalTiledMapRenderer
     init {
 
         val mapSizes = tiledMap.getSize()
@@ -40,17 +38,12 @@ class LevelMapManager(mainStage: MainStage) {
         worldHeight = mapSizes[1]
 
         val mapLayers = tiledMap.layers
-        layerBackgroundZero = mapLayers.get("background_0")
-        layerBackgroundFirst = mapLayers.get("background_1")
-        layerBackgroundSecond = mapLayers.get("background_2")
-        layerForeground = mapLayers.get("foreground")
-        layerPlatformBody = mapLayers.get("platforms")
+        layerPlatformBody = mapLayers.get("platforms") as TiledMapTileLayer
+        layerPlatformBody.createStaticBody(world)
         playerPositions = mapLayers.get("player_positions")
-//        enemiesLayer = mapLayers.get("enemies")
 
-        initPlatforms(world)
+        mapRenderer= OrthogonalTiledMapRenderer(tiledMap,Constants.SCALE)
 
-        tiledMapRenderer = ParallaxTiledMapRenderer(tiledMap, camera)
     }
 
     private fun initPlatforms(world: World) {
@@ -81,17 +74,6 @@ class LevelMapManager(mainStage: MainStage) {
                 .getPosition(playerPosition)
         playerPosition.set(playerPosition.x * Constants.SCALE, playerPosition.y * Constants.SCALE)
         return playerPosition
-    }
-
-    fun renderBackground() {
-        tiledMapRenderer.setView(camera)
-        tiledMapRenderer.renderObjects(layerBackgroundZero)
-        tiledMapRenderer.renderObjects(layerBackgroundFirst)
-        tiledMapRenderer.renderObjects(layerBackgroundSecond)
-    }
-
-    fun renderForeground() {
-        tiledMapRenderer.renderObjects(layerForeground)
     }
 
     companion object {

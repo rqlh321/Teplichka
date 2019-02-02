@@ -8,6 +8,7 @@ object Constants {
 
     const val SCALE = .1f
     const val LEVEL_SCALE = .05f
+    const val TILE_SCALE = 1f
 
     const val SWIPE_LENGTH = 100
     const val REDUSE_CAMERA_SPEED = .5f

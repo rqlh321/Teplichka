@@ -1,40 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="40" tileheight="40" infinite="0" nextlayerid="8" nextobjectid="69">
  <tileset firstgid="1" source="tile_set.tsx"/>
- <objectgroup id="3" name="background_0">
-  <object id="2" name="background_0" gid="1" x="0" y="720" width="1280" height="720"/>
- </objectgroup>
- <objectgroup id="4" name="background_1">
-  <object id="6" name="background_1" gid="3" x="1209.09" y="720" width="514" height="231"/>
-  <object id="7" name="background_1" gid="4" x="1418.12" y="720" width="581" height="189"/>
-  <object id="8" name="background_1" gid="5" x="1756.12" y="720" width="496" height="103"/>
-  <object id="9" name="background_1" gid="6" x="2033.12" y="720" width="462" height="101"/>
-  <object id="15" name="background_1" gid="3" x="8.50015" y="720.864" width="514" height="231"/>
-  <object id="16" name="background_1" gid="4" x="217.53" y="720.864" width="581" height="189"/>
-  <object id="17" name="background_1" gid="5" x="555.53" y="720.864" width="496" height="103"/>
-  <object id="18" name="background_1" gid="6" x="832.53" y="720.864" width="462" height="101"/>
- </objectgroup>
- <objectgroup id="6" name="background_2">
-  <object id="11" name="background_2" gid="7" x="497.03" y="720" width="258" height="311"/>
-  <object id="12" name="background_2" gid="7" x="997.03" y="720" width="258" height="311"/>
-  <object id="13" name="background_2" gid="7" x="241.667" y="720" width="258" height="311"/>
-  <object id="14" name="background_2" gid="7" x="816.333" y="720" width="258" height="311"/>
-  <object id="19" name="background_2" gid="7" x="1284.61" y="720.258" width="258" height="311"/>
-  <object id="20" name="background_2" gid="7" x="1781.64" y="720.258" width="258" height="311"/>
-  <object id="21" name="background_2" gid="7" x="2281.64" y="720.258" width="258" height="311"/>
-  <object id="22" name="background_2" gid="7" x="1526.27" y="720.258" width="258" height="311"/>
-  <object id="23" name="background_2" gid="7" x="2100.94" y="720.258" width="258" height="311"/>
-  <object id="24" name="background_2" gid="7" x="2481.58" y="717.227" width="258" height="311"/>
-  <object id="25" name="background_2" gid="7" x="2978.61" y="717.227" width="258" height="311"/>
-  <object id="26" name="background_2" gid="7" x="3478.61" y="717.227" width="258" height="311"/>
-  <object id="27" name="background_2" gid="7" x="2723.24" y="717.227" width="258" height="311"/>
-  <object id="28" name="background_2" gid="7" x="3297.91" y="717.227" width="258" height="311"/>
-  <object id="29" name="background_2" gid="8" x="0" y="720" width="301" height="379"/>
- </objectgroup>
- <objectgroup id="7" name="foreground">
-  <object id="46" gid="9" x="0" y="720" width="281" height="263"/>
-  <object id="62" gid="9" x="1014.05" y="729.106" width="281" height="263"/>
- </objectgroup>
  <objectgroup id="5" name="player_positions">
   <object id="4" name="start_point" x="964.667" y="700.667"/>
  </objectgroup>
