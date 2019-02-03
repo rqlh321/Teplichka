@@ -20,6 +20,7 @@ class MainStage : Stage() {
 
     private val player: Body
     private val batch = SpriteBatch()
+    val orthographicCamera = camera as OrthographicCamera
 
     val world: World = World(Vector2(0f, -9.8f), true).apply {
         setContactListener(MyContactListener())
@@ -27,7 +28,7 @@ class MainStage : Stage() {
 
     private val lvlManager = LevelMapManager(this)
     private val actorsRenderer: ActorsRenderer
-    private val paralaxRenderer = ParalaxRenderer(camera as OrthographicCamera, batch)
+    private val paralaxRenderer = ParalaxRenderer(orthographicCamera, batch)
     private val box2DDebugRenderer: Box2DDebugRenderer = Box2DDebugRenderer().apply {
         isDrawVelocities = true
         isDrawContacts = true
@@ -42,23 +43,23 @@ class MainStage : Stage() {
 
     override fun act() {
         super.act()
-
         batch.projectionMatrix = camera.combined
 
-//        batch.begin()
+        batch.begin()
+        paralaxRenderer.render()
+        batch.end()
 
-//        paralaxRenderer.render()
-//        actorsRenderer.render(batch)
-
-//        batch.end()
-
-        lvlManager.mapRenderer.setView(camera as OrthographicCamera)
+        lvlManager.mapRenderer.setView(orthographicCamera)
         lvlManager.mapRenderer.render()
+
+        batch.begin()
+        actorsRenderer.render(batch)
+        batch.end()
 
         box2DDebugRenderer.render(world, camera.combined)
 
 
-        camera.smoothScrollOn(player)
+        camera.leapOnTarget(player)
 
         world.act()
 //        if (player.position.y < 0) MyGdxGame.GAME?.create()

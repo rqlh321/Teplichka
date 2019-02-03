@@ -149,26 +149,30 @@ fun TiledMap.getSize(): FloatArray {
 
 fun TiledMapTileLayer.createStaticBody(world: World) {
 
+    val hx = (tileWidth / 2)* Constants.SCALE
+    val hy = (tileHeight / 2)* Constants.SCALE
+
     (0..width).forEach { wIndex ->
+        val centerW = wIndex + .5f
+        val x = centerW * tileWidth * Constants.SCALE
+
         (0..height).forEach { hIndex ->
-            val cell = getCell(wIndex, hIndex)
-            if (cell != null) {
+            val centerH = hIndex + .5f
+            val y = centerH * tileHeight * Constants.SCALE
+
+            if (getCell(wIndex, hIndex) != null) {
+
                 val groundBodyDef = BodyDef()
-                groundBodyDef.position.set(
-                        Vector2(
-                                wIndex * tileWidth * Constants.SCALE* Constants.TILE_SCALE,
-                                hIndex * tileHeight * Constants.SCALE * Constants.TILE_SCALE
-                        )
-                )
+                groundBodyDef.position.set(Vector2(x, y))
+
                 val groundBody = world.createBody(groundBodyDef)
                 groundBody.userData = Entity(Type.PLATFORM)
+
                 val groundBox = PolygonShape()
-                groundBox.setAsBox(
-                        tileWidth / 2 * Constants.SCALE* Constants.TILE_SCALE,
-                        tileHeight / 2 * Constants.SCALE* Constants.TILE_SCALE
-                )
+                groundBox.setAsBox(hx, hy)
                 groundBody.createFixture(groundBox, 0.0f)
                 groundBox.dispose()
+
             }
         }
     }
