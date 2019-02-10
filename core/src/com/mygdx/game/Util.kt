@@ -157,7 +157,7 @@ fun TiledMap.getSize(): FloatArray {
 
 fun TiledMapTileLayer.createStaticBody(world: World) {
 
-    val delta = .1f
+    val padding = .1f
 
     val shifting = .5f
 
@@ -173,8 +173,8 @@ fun TiledMapTileLayer.createStaticBody(world: World) {
                 }
             } else if (startPoint != -1) {
                 val countOfCells = wIndex - startPoint
-                val hx = countOfCells * perCellWidth * .5f - delta
-                val hy = perCellHeight * .5f - delta
+                val hx = countOfCells * perCellWidth * .5f - padding
+                val hy = perCellHeight * .5f
 
                 val x = (startPoint + countOfCells / 2f) * perCellWidth
                 val y = (hIndex + shifting) * perCellHeight

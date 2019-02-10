@@ -13,9 +13,9 @@ import kotlin.random.Random
 class ParalaxRenderer(private val camera: OrthographicCamera, private val batch: Batch) {
 
     private val textures: List<Texture> = listOf(
-            Texture(Gdx.files.internal("map/second/background_0.png")),
-            Texture(Gdx.files.internal("map/second/background_1_1.png")),
-            Texture(Gdx.files.internal("map/second/background_2_0.png"))
+            Texture(Gdx.files.internal("map/test/background/0.png")),
+            Texture(Gdx.files.internal("map/test/background/1_1.png")),
+            Texture(Gdx.files.internal("map/test/background/2_0.png"))
     )
     private val backgrounds: MutableList<Layer>
 
@@ -25,7 +25,7 @@ class ParalaxRenderer(private val camera: OrthographicCamera, private val batch:
             val factor: Float = index / 10f
             (0..(index * 10)).forEach {
                 val x = if (index == 0) 0f else Random.nextInt(0, 30).toFloat()
-                backgrounds.add(Layer(texture, Vector2(x, 0f), factor, factor))
+                backgrounds.add(Layer(texture, Vector2(x*10, 0f), factor, factor))
             }
         }
     }

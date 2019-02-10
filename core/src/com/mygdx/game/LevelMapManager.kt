@@ -13,7 +13,7 @@ import com.mygdx.game.stage.MainStage
 
 class LevelMapManager(mainStage: MainStage) {
 
-    var tiledMap: TiledMap = MyGdxGame.ASSET_MANAGER.get("map/second/map2.tmx")
+    var tiledMap: TiledMap = MyGdxGame.ASSET_MANAGER.get("map/test/map2.tmx")
 
 
     private val world: World = mainStage.world

@@ -11,10 +11,10 @@ object Constants {
 
     const val REDUSE_CAMERA_SPEED = .5f
 
-    val RIGHT = Vector2(1f, 0f)
-    val RIGHT_FORCE = Vector2(300f, 0f)
-    val LEFT = Vector2(-1f, 0f)
-    val LEFT_FORCE = Vector2(-300f, 0f)
-    val UP = Vector2(0f, 4f)
-    val DOWN = Vector2(0f, -4f)
+    val RIGHT = Vector2(10f, 0f)
+    val RIGHT_FORCE = Vector2(600f, 0f)
+    val LEFT = Vector2(-10f, 0f)
+    val LEFT_FORCE = Vector2(-600f, 0f)
+    val UP = Vector2(0f, 30f)
+    val DOWN = Vector2(0f, -20f)
 }

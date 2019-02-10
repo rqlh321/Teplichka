@@ -1,5 +1,6 @@
 package com.mygdx.game.stage
 
+import box2dLight.PointLight
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -15,6 +16,12 @@ import com.mygdx.game.*
 import com.mygdx.game.movement.DirectionGestureListener
 import com.mygdx.game.unit.ActorsRenderer
 import com.mygdx.game.unit.Type
+import box2dLight.RayHandler
+import box2dLight.RayHandler.useDiffuseLight
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.FillViewport
+
 
 class MainStage : Stage() {
 
@@ -22,10 +29,14 @@ class MainStage : Stage() {
     private val batch = SpriteBatch()
     val orthographicCamera = camera as OrthographicCamera
 
-    val world: World = World(Vector2(0f, -9.8f), true).apply {
+    val world: World = World(Vector2(0f, -98f), true).apply {
         setContactListener(MyContactListener())
     }
-
+    private val rayHandler = RayHandler(world).apply {
+        useDiffuseLight(true)
+        setBlur(true)
+        isDebugAll=true
+    }
     private val lvlManager = LevelMapManager(this)
     private val actorsRenderer: ActorsRenderer
     private val paralaxRenderer = ParalaxRenderer(orthographicCamera, batch)
@@ -35,9 +46,11 @@ class MainStage : Stage() {
     }
 
     init {
+
         orthographicCamera.zoom = 10f
-        viewport = FitViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
+        viewport = ExtendViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
         player = world.initBody(Type.PLAYER, lvlManager.startPoint())
+        PointLight(rayHandler,128).attachToBody(player)
         actorsRenderer = ActorsRenderer(player)
         Gdx.input.inputProcessor = GestureDetector(DirectionGestureListener(player))
     }
@@ -57,10 +70,13 @@ class MainStage : Stage() {
         actorsRenderer.render(batch)
         batch.end()
 
+        rayHandler.setCombinedMatrix(orthographicCamera)
+        rayHandler.updateAndRender()
+
         box2DDebugRenderer.render(world, camera.combined)
 
 
-        camera.smoothScrollOn(player)
+        camera.leapOnTarget(player)
 
         world.act()
         if (player.position.y < 0) MyGdxGame.GAME?.create()
