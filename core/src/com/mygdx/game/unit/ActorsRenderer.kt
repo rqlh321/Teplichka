@@ -17,7 +17,7 @@ class ActorsRenderer(vararg bodys: Body) {
             it.entries.forEach { actor ->
                 val texture = actor.value
                 val position = actor.key
-                batch.draw(texture, position.x - .1f, position.y - .1f, .2f, .2f)
+                batch.draw(texture, position.x - .8f, position.y - .8f, 1.6f, 1.6f)
             }
         }
     }

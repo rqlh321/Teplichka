@@ -31,8 +31,8 @@
 //                        texture.rotation
 //                )
 //            } else if (mapObject.name != null && mapObject.name == "background_1") {
-//                val convertedPositionX = texture!!.x * Constants.SCALE * Constants.LEVEL_SCALE
-//                val convertedPositionY = texture.y * Constants.SCALE * Constants.LEVEL_SCALE
+//                val convertedPositionX = texture!!.x * Constants.MPP * Constants.LEVEL_SCALE
+//                val convertedPositionY = texture.y * Constants.MPP * Constants.LEVEL_SCALE
 //                batch.draw(
 //                        texture.textureRegion,
 //                        convertedPositionX + (camera.position.x - camera.viewportWidth / 2) - camera.position.x * .1f,
@@ -41,13 +41,13 @@
 //                        texture.originY,
 //                        texture.textureRegion.regionWidth.toFloat(),
 //                        texture.textureRegion.regionHeight.toFloat(),
-//                        texture.scaleX * Constants.SCALE * Constants.LEVEL_SCALE,
-//                        texture.scaleY * Constants.SCALE * Constants.LEVEL_SCALE,
+//                        texture.scaleX * Constants.MPP * Constants.LEVEL_SCALE,
+//                        texture.scaleY * Constants.MPP * Constants.LEVEL_SCALE,
 //                        texture.rotation
 //                )
 //            } else if (mapObject.name != null && mapObject.name == "background_2") {
-//                val convertedPositionX = texture!!.x * Constants.SCALE * Constants.LEVEL_SCALE
-//                val convertedPositionY = texture.y * Constants.SCALE * Constants.LEVEL_SCALE
+//                val convertedPositionX = texture!!.x * Constants.MPP * Constants.LEVEL_SCALE
+//                val convertedPositionY = texture.y * Constants.MPP * Constants.LEVEL_SCALE
 //                batch.draw(
 //                        texture.textureRegion,
 //                        convertedPositionX + (camera.position.x - camera.viewportWidth / 2) - camera.position.x * .3f,
@@ -56,13 +56,13 @@
 //                        texture.originY,
 //                        texture.textureRegion.regionWidth.toFloat(),
 //                        texture.textureRegion.regionHeight.toFloat(),
-//                        texture.scaleX * Constants.SCALE * Constants.LEVEL_SCALE,
-//                        texture.scaleY * Constants.SCALE * Constants.LEVEL_SCALE,
+//                        texture.scaleX * Constants.MPP * Constants.LEVEL_SCALE,
+//                        texture.scaleY * Constants.MPP * Constants.LEVEL_SCALE,
 //                        texture.rotation
 //                )
 //            } else {
-//                val convertedPositionX = texture!!.x * Constants.SCALE * Constants.LEVEL_SCALE
-//                val convertedPositionY = texture.y * Constants.SCALE * Constants.LEVEL_SCALE
+//                val convertedPositionX = texture!!.x * Constants.MPP * Constants.LEVEL_SCALE
+//                val convertedPositionY = texture.y * Constants.MPP * Constants.LEVEL_SCALE
 //                batch.draw(
 //                        texture.textureRegion,
 //                        texture.x,
@@ -71,8 +71,8 @@
 //                        texture.originY,
 //                        texture.textureRegion.regionWidth.toFloat(),
 //                        texture.textureRegion.regionHeight.toFloat(),
-//                        texture.scaleX * Constants.SCALE * Constants.LEVEL_SCALE,
-//                        texture.scaleY * Constants.SCALE * Constants.LEVEL_SCALE,
+//                        texture.scaleX * Constants.MPP * Constants.LEVEL_SCALE,
+//                        texture.scaleY * Constants.MPP * Constants.LEVEL_SCALE,
 //                        texture.rotation
 //                )
 //            }

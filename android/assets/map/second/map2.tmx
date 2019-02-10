@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="80" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="2">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="80" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="2">
  <tileset firstgid="1" source="base.tsx"/>
  <layer id="1" name="platforms" width="80" height="45">
   <data encoding="base64" compression="zlib">
-   eJztw7ENAAAMAiDj/0d7RJcOkJAAAAAAAAAAAAAAAAAAwD/1dJ2AAKE=
+   eJzt0kEKwCAMRUHx/ofuSpCSaBq6nIGQ/eOPAQAAAAAAAAAAAAD/mNtRp1ufbt/M7WvXo1nfDH505N4NqYv2t77t1WQNuTvtb307PLs1JPcAbrYAVw==
   </data>
  </layer>
- <objectgroup id="2" name="player_positions">
-  <object id="1" name="start_point" x="1124.33" y="533.167"/>
- </objectgroup>
+ <layer id="4" name="player" width="80" height="45">
+  <data encoding="base64" compression="zlib">
+   eJztzkENAAAIAKHLY/+AlnDzAwkoAAAAAAAAAAAAAACo+Q4AAHBqAdcPACs=
+  </data>
+ </layer>
 </map>

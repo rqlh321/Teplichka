@@ -22,9 +22,9 @@ class ParalaxRenderer(private val camera: OrthographicCamera, private val batch:
     init {
         backgrounds = ArrayList()
         textures.forEachIndexed { index, texture ->
-            val factor:Float = index / 10f
+            val factor: Float = index / 10f
             (0..(index * 10)).forEach {
-                val x = if(index==0) 0f else Random.nextInt(0,30).toFloat()
+                val x = if (index == 0) 0f else Random.nextInt(0, 30).toFloat()
                 backgrounds.add(Layer(texture, Vector2(x, 0f), factor, factor))
             }
         }
@@ -34,7 +34,7 @@ class ParalaxRenderer(private val camera: OrthographicCamera, private val batch:
 
     fun render() {
         backgrounds.forEach {
-            batch.draw(it.texture, it.x(camera), it.y(camera), it.width, it.height)
+            batch.draw(it.texture, it.x(camera), it.y(camera), it.width(camera), it.height(camera))
         }
     }
 
@@ -44,8 +44,8 @@ class ParalaxRenderer(private val camera: OrthographicCamera, private val batch:
             private val xFactor: Float,
             private val yFactor: Float
     ) {
-        val width = if (xFactor == 0f) VIEW_PORT_WIDTH else texture.width * Constants.SCALE * Constants.LEVEL_SCALE
-        val height = if (yFactor == 0f) VIEW_PORT_HEIGHT else texture.height * Constants.SCALE * Constants.LEVEL_SCALE
+        fun width(camera: OrthographicCamera) = if (xFactor == 0f) VIEW_PORT_WIDTH * camera.zoom else texture.width * camera.zoom * Constants.MPP * Constants.LEVEL_SCALE
+        fun height(camera: OrthographicCamera) = if (yFactor == 0f) VIEW_PORT_HEIGHT * camera.zoom else texture.height * camera.zoom * Constants.MPP * Constants.LEVEL_SCALE
 
         fun x(camera: OrthographicCamera) = camera.position.x - VIEW_PORT_WIDTH * camera.zoom / 2 + position.x - camera.position.x * xFactor
         fun y(camera: OrthographicCamera) = camera.position.y - VIEW_PORT_HEIGHT * camera.zoom / 2 + position.y - camera.position.y * yFactor

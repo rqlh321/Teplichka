@@ -35,6 +35,7 @@ class MainStage : Stage() {
     }
 
     init {
+        orthographicCamera.zoom = 10f
         viewport = FitViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
         player = world.initBody(Type.PLAYER, lvlManager.startPoint())
         actorsRenderer = ActorsRenderer(player)
@@ -59,10 +60,10 @@ class MainStage : Stage() {
         box2DDebugRenderer.render(world, camera.combined)
 
 
-        camera.leapOnTarget(player)
+        camera.smoothScrollOn(player)
 
         world.act()
-//        if (player.position.y < 0) MyGdxGame.GAME?.create()
+        if (player.position.y < 0) MyGdxGame.GAME?.create()
     }
 
     override fun dispose() {

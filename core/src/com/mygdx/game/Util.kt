@@ -9,8 +9,6 @@ import com.badlogic.gdx.utils.Array
 import com.mygdx.game.LevelMapManager.Companion.worldWidth
 import com.mygdx.game.unit.Entity
 import com.mygdx.game.unit.Type
-import com.badlogic.gdx.physics.box2d.PolygonShape
-import com.badlogic.gdx.physics.box2d.BodyDef
 
 
 fun World.act() {
@@ -51,30 +49,40 @@ fun World.initBody(type: Type, position: Vector2): Body {
     bodyDef.type = BodyDef.BodyType.DynamicBody
     bodyDef.position.set(position)
     bodyDef.fixedRotation = true
+
     val body = createBody(bodyDef)
     body.userData = Entity(type)
 
-    val circleShape = CircleShape()
     val fixtureDefFoots = FixtureDef()
 
     when (type) {
         Type.ENEMY -> {
+            val circleShape = CircleShape()
             circleShape.radius = Math.random().toFloat() * .1f
+
             fixtureDefFoots.restitution = Math.random().toFloat() * .1f
             fixtureDefFoots.density = Math.random().toFloat() * .1f
+            fixtureDefFoots.shape = circleShape
+
+            body.createFixture(fixtureDefFoots)
+
+            circleShape.dispose()
         }
         Type.PLAYER -> {
-            circleShape.radius = .1f
+            val box = PolygonShape()
+            box.setAsBox(.8f, .8f)
+
             fixtureDefFoots.restitution = 0f
             fixtureDefFoots.density = 0f
             fixtureDefFoots.friction = 0f
+            fixtureDefFoots.shape = box
 
+            body.createFixture(fixtureDefFoots)
+
+            box.dispose()
         }
     }
 
-    fixtureDefFoots.shape = circleShape
-    body.createFixture(fixtureDefFoots)
-    circleShape.dispose()
 
     return body
 }
@@ -149,31 +157,64 @@ fun TiledMap.getSize(): FloatArray {
 
 fun TiledMapTileLayer.createStaticBody(world: World) {
 
-    val hx = (tileWidth / 2)* Constants.SCALE
-    val hy = (tileHeight / 2)* Constants.SCALE
+    val delta = .1f
 
-    (0..width).forEach { wIndex ->
-        val centerW = wIndex + .5f
-        val x = centerW * tileWidth * Constants.SCALE
+    val shifting = .5f
 
-        (0..height).forEach { hIndex ->
-            val centerH = hIndex + .5f
-            val y = centerH * tileHeight * Constants.SCALE
+    val perCellWidth = tileWidth * Constants.MPP
+    val perCellHeight = tileHeight * Constants.MPP
 
+    (0..height).forEach { hIndex ->
+        var startPoint = -1
+        (0..width).forEach { wIndex ->
             if (getCell(wIndex, hIndex) != null) {
+                if (startPoint == -1) {
+                    startPoint = wIndex
+                }
+            } else if (startPoint != -1) {
+                val countOfCells = wIndex - startPoint
+                val hx = countOfCells * perCellWidth * .5f - delta
+                val hy = perCellHeight * .5f - delta
+
+                val x = (startPoint + countOfCells / 2f) * perCellWidth
+                val y = (hIndex + shifting) * perCellHeight
 
                 val groundBodyDef = BodyDef()
                 groundBodyDef.position.set(Vector2(x, y))
-
                 val groundBody = world.createBody(groundBodyDef)
                 groundBody.userData = Entity(Type.PLATFORM)
-
                 val groundBox = PolygonShape()
                 groundBox.setAsBox(hx, hy)
                 groundBody.createFixture(groundBox, 0.0f)
                 groundBox.dispose()
 
+                startPoint = -1
             }
         }
     }
+}
+
+fun TiledMapTileLayer.positions(): List<Vector2> {
+    val result = ArrayList<Vector2>()
+    val perCellWidth = tileWidth * Constants.MPP
+    val perCellHeight = tileHeight * Constants.MPP
+
+    val shifting = .5f
+
+    (0..height).forEach { hIndex ->
+        (0..width).forEach { wIndex ->
+            if (getCell(wIndex, hIndex) != null) {
+                val centerW = wIndex + shifting
+                val x = centerW * perCellWidth
+
+                val centerH = hIndex + shifting
+                val y = centerH * perCellHeight
+
+                val position = Vector2(x, y)
+
+                result.add(position)
+            }
+        }
+    }
+    return result
 }
