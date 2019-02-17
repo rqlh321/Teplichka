@@ -15,6 +15,5 @@ class MyGdxGame : Game() {
     companion object {
         var GAME: MyGdxGame? = null
         val ASSET_MANAGER = AssetManager()
-
     }
 }

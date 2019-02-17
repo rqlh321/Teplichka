@@ -33,7 +33,10 @@ class DirectionGestureListener(private val body: Body) : GestureDetector.Gesture
     }
 
     private fun onDown() {
-        body.linearVelocity = Constants.DOWN
+        if (!entity.onGround) {
+            body.linearVelocity = Constants.DOWN
+            entity.atack = true
+        }
     }
 
     private fun onLeft() {

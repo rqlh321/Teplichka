@@ -1,4 +1,4 @@
-package com.mygdx.game.stage
+package com.mygdx.game.renderer
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -25,7 +25,7 @@ class ParalaxRenderer(private val camera: OrthographicCamera, private val batch:
             val factor: Float = index / 10f
             (0..(index * 10)).forEach {
                 val x = if (index == 0) 0f else Random.nextInt(0, 30).toFloat()
-                backgrounds.add(Layer(texture, Vector2(x*10, 0f), factor, factor))
+                backgrounds.add(Layer(texture, Vector2(x * 10, 0f), factor, factor))
             }
         }
     }

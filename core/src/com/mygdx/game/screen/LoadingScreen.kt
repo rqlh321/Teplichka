@@ -13,7 +13,7 @@ class LoadingScreen(private val game: Game) : Screen {
 
     init {
         MyGdxGame.ASSET_MANAGER.setLoader<TiledMap, TmxMapLoader.Parameters>(TiledMap::class.java, TmxMapLoader(InternalFileHandleResolver()))
-        MyGdxGame.ASSET_MANAGER.load("map/test/map2.tmx", TiledMap::class.java)
+        MyGdxGame.ASSET_MANAGER.load(TEST_LEVEL, TiledMap::class.java)
     }
 
     override fun show() = Unit
@@ -30,9 +30,13 @@ class LoadingScreen(private val game: Game) : Screen {
 
     override fun pause() = Unit
 
-    override fun resume()  = Unit
+    override fun resume() = Unit
 
-    override fun hide()  = Unit
+    override fun hide() = Unit
 
-    override fun dispose()  = Unit
+    override fun dispose() = Unit
+
+    companion object {
+       const val TEST_LEVEL = "map/test/test.tmx"
+    }
 }

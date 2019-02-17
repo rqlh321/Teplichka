@@ -6,10 +6,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.utils.Array
-import com.mygdx.game.LevelMapManager.Companion.worldWidth
 import com.mygdx.game.unit.Entity
 import com.mygdx.game.unit.Type
-
 
 fun World.act() {
     step(1 / 60f, 6, 2)
@@ -22,26 +20,6 @@ fun World.act() {
             destroyBody(body)
         }
     }
-}
-
-fun World.initPlatform(): Body {
-    val bodyDef = BodyDef()
-    bodyDef.type = BodyDef.BodyType.StaticBody
-    bodyDef.position.set(Vector2(0f, 0f))
-    bodyDef.fixedRotation = false
-    val body = createBody(bodyDef)
-    body.userData = Entity(Type.PLATFORM)
-    val bodyShape = ChainShape()
-    val chain = FloatArray(10)
-    chain.forEachIndexed { index, _ ->
-        chain[index] = if (index % 2 == 0) index * 5f else Math.random().toFloat()
-    }
-    bodyShape.createChain(chain)
-    val fixtureDefBody = FixtureDef()
-    fixtureDefBody.shape = bodyShape
-    body.createFixture(fixtureDefBody)
-    bodyShape.dispose()
-    return body
 }
 
 fun World.initBody(type: Type, position: Vector2): Body {
@@ -69,17 +47,17 @@ fun World.initBody(type: Type, position: Vector2): Body {
             circleShape.dispose()
         }
         Type.PLAYER -> {
-            val box = PolygonShape()
-            box.setAsBox(.8f, .8f)
+            val circleShape = CircleShape()
+            circleShape.radius = .75f
 
             fixtureDefFoots.restitution = 0f
             fixtureDefFoots.density = 0f
             fixtureDefFoots.friction = 0f
-            fixtureDefFoots.shape = box
+            fixtureDefFoots.shape = circleShape
 
             body.createFixture(fixtureDefFoots)
 
-            box.dispose()
+            circleShape.dispose()
         }
     }
 
@@ -105,69 +83,20 @@ fun Camera.smoothScrollOn(body: Body) {
     update()
 }
 
-fun Camera.leapOnTarget(body: Body) {
-    if (body.position.x - viewportWidth / 2 > 0 && body.position.x + viewportWidth / 2 < worldWidth) {
-        if (body.position.y > viewportHeight / 2) {
-            position.set(
-                    position.x + (body.position.x - position.x) * Constants.REDUSE_CAMERA_SPEED,
-                    position.y + (body.position.y - position.y) * Constants.REDUSE_CAMERA_SPEED,
-                    0f)
-        } else {
-            position.set(
-                    position.x + (body.position.x - position.x) * Constants.REDUSE_CAMERA_SPEED,
-                    position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
-                    0f)
-        }
-    } else {
-        if (body.position.y > viewportHeight / 2) {
-            position.set(
-                    position.x,
-                    position.y + (body.position.y - position.y) * Constants.REDUSE_CAMERA_SPEED,
-                    0f)
-        } else {
-            if (body.position.x < viewportWidth / 2) {
-                position.set(
-                        position.x + (viewportWidth / 2 - position.x) * Constants.REDUSE_CAMERA_SPEED,
-                        position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
-                        0f)
-            } else {
-                position.set(
-                        position.x + (worldWidth - viewportWidth / 2 - position.x) * Constants.REDUSE_CAMERA_SPEED,
-                        position.y + (viewportHeight / 2 - position.y) * Constants.REDUSE_CAMERA_SPEED,
-                        0f)
-            }
-        }
-    }
-//    camera.zoom = camera.zoom + (1 + Math.abs(body.linearVelocity.x) * .05f - camera.zoom) * .01f
-    update()
-}
+fun TiledMap.createPlatformsBody(world: World) {
 
-fun TiledMap.getSize(): FloatArray {
-    val prop = properties
-    val mapWidth = prop.get("width", Int::class.java)
-    val mapHeight = prop.get("height", Int::class.java)
-    val tilePixelWidth = prop.get("tilewidth", Int::class.java)
-    val tilePixelHeight = prop.get("tileheight", Int::class.java)
-
-    val mapPixelWidth = mapWidth * tilePixelWidth.toFloat()
-    val mapPixelHeight = mapHeight * tilePixelHeight.toFloat()
-
-    return floatArrayOf(mapPixelWidth, mapPixelHeight)
-}
-
-fun TiledMapTileLayer.createStaticBody(world: World) {
-
+    val layer = this.layers.get("platforms") as TiledMapTileLayer
     val padding = .1f
 
     val shifting = .5f
 
-    val perCellWidth = tileWidth * Constants.MPP
-    val perCellHeight = tileHeight * Constants.MPP
+    val perCellWidth = layer.tileWidth * Constants.MPP
+    val perCellHeight = layer.tileHeight * Constants.MPP
 
-    (0..height).forEach { hIndex ->
+    (0..layer.height).forEach { hIndex ->
         var startPoint = -1
-        (0..width).forEach { wIndex ->
-            if (getCell(wIndex, hIndex) != null) {
+        (0..layer.width).forEach { wIndex ->
+            if (layer.getCell(wIndex, hIndex) != null) {
                 if (startPoint == -1) {
                     startPoint = wIndex
                 }
@@ -189,6 +118,48 @@ fun TiledMapTileLayer.createStaticBody(world: World) {
                 groundBox.dispose()
 
                 startPoint = -1
+            }
+        }
+    }
+}
+
+fun TiledMap.createPlatformsBoxBody(world: World) {
+
+    val layer = this.layers.get("platforms") as TiledMapTileLayer
+
+    val shifting = .5f
+
+    val perCellWidth = layer.tileWidth * Constants.MPP
+    val perCellHeight = layer.tileHeight * Constants.MPP
+
+    (0..layer.height).forEach { hIndex ->
+        (0..layer.width).forEach { wIndex ->
+            if (layer.getCell(wIndex, hIndex) != null) {
+
+                val hx = perCellWidth * .5f
+                val hy = perCellHeight * .5f
+
+                val x = (wIndex + shifting) * perCellWidth
+                val y = (hIndex + shifting) * perCellHeight
+
+                val bodyDef = BodyDef()
+                bodyDef.position.set(Vector2(x, y))
+
+                val body = world.createBody(bodyDef)
+                body.userData = Entity(Type.PLATFORM)
+
+                val shape = PolygonShape()
+                shape.setAsBox(hx, hy)
+
+                val fixtureDef = FixtureDef()
+                fixtureDef.shape = shape
+                fixtureDef.restitution = 0f
+                fixtureDef.density = 0f
+                fixtureDef.friction = 0f
+
+                body.createFixture(fixtureDef)
+
+                shape.dispose()
             }
         }
     }
@@ -217,4 +188,9 @@ fun TiledMapTileLayer.positions(): List<Vector2> {
         }
     }
     return result
+}
+
+fun TiledMap.playerPosition(): Vector2 {
+    val point = (layers.get("player") as TiledMapTileLayer).positions().first()
+    return point
 }
