@@ -6,4 +6,10 @@ data class Entity(
         var alive: Boolean = true,
         var extraForce: Boolean = true,
         var atack: Boolean = false
-)
+) {
+    companion object {
+        const val HEAD = "head"
+        const val CORE = "core"
+        const val FOOT = "foot"
+    }
+}

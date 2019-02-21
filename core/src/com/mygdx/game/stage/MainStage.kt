@@ -35,7 +35,7 @@ class MainStage : Stage() {
     init {
         viewport = ExtendViewport(Constants.VIEW_PORT_WIDTH, Constants.VIEW_PORT_HEIGHT, camera)
 
-        tiledMap.createPlatformsBoxBody(world)
+        tiledMap.createPlatformsBody(world)
 
         player = world.initBody(Type.PLAYER, tiledMap.playerPosition())
         Gdx.input.inputProcessor = GestureDetector(DirectionGestureListener(player))

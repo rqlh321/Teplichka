@@ -30,38 +30,50 @@ fun World.initBody(type: Type, position: Vector2): Body {
 
     val body = createBody(bodyDef)
     body.userData = Entity(type)
+//core
+    val coreFixtureDef = FixtureDef()
+    coreFixtureDef.restitution = 0f
+    coreFixtureDef.density = 0f
+    coreFixtureDef.friction = 0f
 
-    val fixtureDefFoots = FixtureDef()
+    val coreShape = PolygonShape()
+    coreShape.set(floatArrayOf(
+            -.8f, -.7f,
+            -.7f, -.8f,
+            .7f, -.8f,
+            .8f, -.7f
+            )
+    )
+    coreFixtureDef.shape = coreShape
 
-    when (type) {
-        Type.ENEMY -> {
-            val circleShape = CircleShape()
-            circleShape.radius = Math.random().toFloat() * .1f
+    val coreFixture = body.createFixture(coreFixtureDef)
+    coreFixture.userData = Entity.CORE
 
-            fixtureDefFoots.restitution = Math.random().toFloat() * .1f
-            fixtureDefFoots.density = Math.random().toFloat() * .1f
-            fixtureDefFoots.shape = circleShape
+    coreShape.dispose()
+//foot
+    val footFixtureDef = FixtureDef()
 
-            body.createFixture(fixtureDefFoots)
+    val footShape = PolygonShape()
+    footShape.setAsBox(.6f, .1f, Vector2(0f, -.9f), 0f)
+    footFixtureDef.shape = footShape
 
-            circleShape.dispose()
-        }
-        Type.PLAYER -> {
-            val circleShape = CircleShape()
-            circleShape.radius = .75f
+    val footFixture = body.createFixture(footFixtureDef)
+    footFixture.userData = Entity.FOOT
+    footFixture.isSensor = true
 
-            fixtureDefFoots.restitution = 0f
-            fixtureDefFoots.density = 0f
-            fixtureDefFoots.friction = 0f
-            fixtureDefFoots.shape = circleShape
+    footShape.dispose()
+// head
+    val headFixtureDef = FixtureDef()
 
-            body.createFixture(fixtureDefFoots)
+    val headShape = PolygonShape()
+    headShape.setAsBox(.6f, .1f, Vector2(0f, .9f), 0f)
+    headFixtureDef.shape = headShape
 
-            circleShape.dispose()
-        }
-    }
+    val headFixture = body.createFixture(headFixtureDef)
+    headFixture.userData = Entity.HEAD
+    headFixture.isSensor = true
 
-
+    headShape.dispose()
     return body
 }
 
