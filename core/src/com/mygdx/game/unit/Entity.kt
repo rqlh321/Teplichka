@@ -11,5 +11,6 @@ data class Entity(
         const val HEAD = "head"
         const val CORE = "core"
         const val FOOT = "foot"
+        const val GROUND = "ground"
     }
 }

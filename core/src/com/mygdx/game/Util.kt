@@ -41,9 +41,12 @@ fun World.initBody(type: Type, position: Vector2): Body {
             -.8f, -.7f,
             -.7f, -.8f,
             .7f, -.8f,
-            .8f, -.7f
-            )
-    )
+            .8f, -.7f,
+            .8f, .7f,
+            .7f, .8f,
+            -.7f, .8f,
+            -.8f, .7f
+    ))
     coreFixtureDef.shape = coreShape
 
     val coreFixture = body.createFixture(coreFixtureDef)
@@ -55,6 +58,11 @@ fun World.initBody(type: Type, position: Vector2): Body {
 
     val footShape = PolygonShape()
     footShape.setAsBox(.6f, .1f, Vector2(0f, -.9f), 0f)
+//    footShape.set(floatArrayOf(
+//            -.7f, -.9f,
+//            .7f,-.9f,
+//            .8f, -.9f
+//    ))
     footFixtureDef.shape = footShape
 
     val footFixture = body.createFixture(footFixtureDef)
@@ -98,7 +106,6 @@ fun Camera.smoothScrollOn(body: Body) {
 fun TiledMap.createPlatformsBody(world: World) {
 
     val layer = this.layers.get("platforms") as TiledMapTileLayer
-    val padding = .1f
 
     val shifting = .5f
 
@@ -114,7 +121,7 @@ fun TiledMap.createPlatformsBody(world: World) {
                 }
             } else if (startPoint != -1) {
                 val countOfCells = wIndex - startPoint
-                val hx = countOfCells * perCellWidth * .5f - padding
+                val hx = countOfCells * perCellWidth * .5f
                 val hy = perCellHeight * .5f
 
                 val x = (startPoint + countOfCells / 2f) * perCellWidth
@@ -126,7 +133,8 @@ fun TiledMap.createPlatformsBody(world: World) {
                 groundBody.userData = Entity(Type.PLATFORM)
                 val groundBox = PolygonShape()
                 groundBox.setAsBox(hx, hy)
-                groundBody.createFixture(groundBox, 0.0f)
+                val groundFixture = groundBody.createFixture(groundBox, 0.0f)
+                groundFixture.userData = Entity.GROUND
                 groundBox.dispose()
 
                 startPoint = -1
