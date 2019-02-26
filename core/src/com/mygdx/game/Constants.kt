@@ -17,4 +17,5 @@ object Constants {
     val LEFT_FORCE = Vector2(-600f, 0f)
     val UP = Vector2(0f, 50f)
     val DOWN = Vector2(0f, -50f)
+    val STOP = Vector2(0f, -0f)
 }

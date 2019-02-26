@@ -1,6 +1,7 @@
 package com.mygdx.game.movement
 
 import com.badlogic.gdx.input.GestureDetector
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.mygdx.game.Constants
 import com.mygdx.game.unit.Entity
@@ -8,23 +9,57 @@ import com.mygdx.game.unit.Entity
 class DirectionGestureListener(private val body: Body) : GestureDetector.GestureAdapter() {
 
     private val entity = body.userData as Entity
-
-    override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
-        if (entity.onGround) {
-            body.linearVelocity = Constants.UP.apply { this.x = body.linearVelocity.x }
-        } else {
-            body.linearVelocity = Constants.DOWN
-            entity.atack = true
-        }
-        return super.tap(x, y, count, button)
+    override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float): Boolean {
+        println("$deltaX : $deltaY")
+        return super.pan(x, y, deltaX, deltaY)
     }
 
     override fun fling(velocityX: Float, velocityY: Float, button: Int): Boolean {
         if (Math.abs(velocityX) > Math.abs(velocityY)) {
-            body.linearVelocity = body.linearVelocity.apply { x = velocityX/100 }
+            if (velocityX > 0) {
+                onRight()
+            } else {
+                onLeft()
+            }
+        } else {
+            if (velocityY > 0) {
+                onDown()
+            } else {
+                onUp()
+            }
         }
         return super.fling(velocityX, velocityY, button)
     }
 
+    private fun onUp() {
+        if (entity.onGround) {
+            body.linearVelocity = Constants.UP.apply { x = body.linearVelocity.x }
+        }
+    }
+
+    private fun onDown() {
+        if (!entity.onGround) {
+            body.linearVelocity = Constants.DOWN
+            entity.atack = true
+        }
+    }
+
+    private fun onLeft() {
+        if (entity.onGround) {
+            body.linearVelocity = Constants.LEFT
+        } else if (entity.extraForce) {
+            entity.extraForce = false
+            body.applyForceToCenter(Constants.LEFT_FORCE, true)
+        }
+    }
+
+    private fun onRight() {
+        if (entity.onGround) {
+            body.linearVelocity = Constants.RIGHT
+        } else if (entity.extraForce) {
+            entity.extraForce = false
+            body.applyForceToCenter(Constants.RIGHT_FORCE, true)
+        }
+    }
 
 }
